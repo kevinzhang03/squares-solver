@@ -1,0 +1,21 @@
+beautifulsoup4==4.12.3
+bs4==0.0.2
+certifi==2024.2.2
+charset-normalizer==3.3.2
+click==8.1.7
+english-words @ file:./dist/english_words-2.0.1-py3-none-any.whl
+idna==3.6
+MouseInfo==0.1.3
+pillow==10.2.0
+PyAutoGUI==0.9.54
+PyGetWindow==0.0.9
+PyMsgBox==1.0.9
+pyperclip==1.8.2
+PyRect==0.2.0
+PyScreeze==0.1.30
+python3-xlib==0.15
+pytweening==1.2.0
+requests==2.31.0
+soupsieve==2.5
+tabulate==0.9.0
+urllib3==2.2.1
