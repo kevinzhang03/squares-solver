@@ -3,7 +3,7 @@ bs4==0.0.2
 certifi==2024.2.2
 charset-normalizer==3.3.2
 click==8.1.7
-english-words @ file:./dist/english_words-2.0.1-py3-none-any.whl
+# english-words @ file:./dist/english_words-2.0.1-py3-none-any.whl
 idna==3.6
 MouseInfo==0.1.3
 pillow==10.2.0

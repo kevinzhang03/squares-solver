@@ -2,6 +2,7 @@ import argparse
 import time
 from tabulate import tabulate
 import pyautogui
+import keyboard
 from english_words import get_english_words_set
 
 start_time = time.time()
@@ -10,17 +11,22 @@ MIN_WORD_LEN = 4
 DIRECTIONS = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
 DIRECTION_NAMES = ['LU', 'U ', 'RU', 'L ', 'R ', 'LD', 'D ', 'RD']
 
+COORDS_SQUARES = [(896, 296), (1296, 696)]
+COORDS_SQUAREDLE = [(1330, 350), (1730, 750)]
+
 # Parse command-line arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('-m', '--max', type=int, default=8, help='Maximum word length')
 parser.add_argument('-w', '--width', type=int, default=80, help='Max char width of the output')
 parser.add_argument('-v', '--verbose', action='store_true', help='Enable verbose output')
 parser.add_argument('-d', '--detailed', action='store_true', help='Display detailed output')
+parser.add_argument('-a', '--auto', action='store_true', help='Use mouse to automatically play the game')
 args = parser.parse_args()
 max_depth = args.max
 width = args.width
 verbose = args.verbose
 detailed_output = args.detailed
+auto = args.auto
 
 # Validate the max_depth to ensure it's at least MIN_WORD_LEN
 if max_depth < MIN_WORD_LEN:
@@ -138,9 +144,14 @@ def move_mouse_to_play(words_info, grid_top_left, grid_bottom_right):
     cell_width = grid_width / 4
     cell_height = grid_height / 4
 
-    MOVE_DURATION = 0.05  # Duration to move between letters
+    MOVE_DURATION = 0.001
+    
+    print()
+    counter = 0
 
     for word_info in words_info:
+        counter += 1
+        print(f"{counter}: Solving word \"{word_info['word']}\"...")
         path = word_info['paths'][0]  # Only use the first path
         start_position = path['start_location']
         start_x = grid_top_left[0] + (start_position[1] * cell_width) + (cell_width / 2)
@@ -150,20 +161,32 @@ def move_mouse_to_play(words_info, grid_top_left, grid_bottom_right):
         pyautogui.mouseDown()
 
         for move in path['move_sequence']:
-            dx, dy = DIRECTIONS[DIRECTION_NAMES.index(move)]
+            if keyboard.is_pressed('esc'):  # Check again before each move
+                print("Exiting early...")
+                pyautogui.mouseUp()  # Release the mouse button before exiting
+                return  # Exit the function
+            
+            dy, dx = DIRECTIONS[DIRECTION_NAMES.index(move)]
             start_x += dx * cell_width
             start_y += dy * cell_height
             pyautogui.moveTo(start_x, start_y, duration=MOVE_DURATION)
 
         pyautogui.mouseUp()
-        time.sleep(0.1)  # Wait a bit before starting the next word
+        # time.sleep(0.6)
 
+
+# squares = """
+# copp
+# ikri
+# tasu
+# vkge
+# """
 
 squares = """
-eipa
-quen
-escs
-hseh
+ansh
+pece
+iuss
+eqeh
 """
 
 squares = [list(line) for line in squares.strip().split('\n')]
@@ -179,14 +202,15 @@ if __name__ == "__main__":
         detailed_output
     )
 
-    # Wait 5 seconds before starting the mouse movement
-    print("waiting 5 seconds before the mouse goes brr...")
-    time.sleep(5)
-    grid_top_left = (1330, 350)
-    grid_bottom_right = (1730, 750)
-
-    move_mouse_to_play(words_info, grid_top_left, grid_bottom_right)
-
     end_time = time.time()
     execution_time = end_time - start_time
     print(f"{execution_time:.3f} seconds execution time.")
+
+    if auto:
+        # Wait 5 seconds before starting the mouse movement
+        for i in range (3):
+            print(f"auto mouse starting in {3 - i}...")
+            time.sleep(1)
+        grid_top_left = COORDS_SQUAREDLE[0]
+        grid_bottom_right = COORDS_SQUAREDLE[1]
+        move_mouse_to_play(words_info, grid_top_left, grid_bottom_right)
