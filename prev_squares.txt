@@ -1,0 +1,20 @@
+squares_0328 = """
+lisv
+dati
+bwvo
+lasr
+"""
+
+squares_0329 = """
+swmg
+dlek
+ltni
+iiml
+"""
+
+squares_0330 = """
+ourb
+isfo
+ndaa
+gwrg
+"""
